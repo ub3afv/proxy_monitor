@@ -1,0 +1,48 @@
+
+🚀 Установка:
+# 1. Создать файлы
+nano install.sh    # вставить код → Ctrl+O → Enter → Ctrl+X
+nano uninstall.sh  # вставить код → Ctrl+O → Enter → Ctrl+X
+
+# 2. Запустить
+chmod +x install.sh uninstall.sh
+sudo ./install.sh
+
+
+🔍 Проверка после установки:
+# 1. Веб работает
+curl -s -o /dev/null -w "%{http_code}\n" http://localhost:8080/
+# Ожидаем: 200
+
+# 2. Админ без пароля — 401
+curl -s -o /dev/null -w "%{http_code}\n" http://localhost:8080/admin
+# Ожидаем: 401
+
+# 3. Админ с паролем — 200
+curl -s -u admin:ВАШ_ПАРОЛЬ -o /dev/null -w "%{http_code}\n" http://localhost:8080/admin
+# Ожидаем: 200
+
+# 4. Таймер на 24 часа
+systemctl list-timers | grep proxy-monitor
+# Ожидаем: ... 24h ...
+
+# 5. API доступен с авторизацией
+curl -s -u admin:ВАШ_ПАРОЛЬ http://localhost:8080/api/config | python3 -m json.tool | head -5
+# Ожидаем: {"ok": true, "config": {...}}
+
+🛠️ Управление:
+# Запустить проверку вручную (альтернатива кнопке)
+sudo systemctl start proxy-monitor
+
+# Посмотреть статус таймера
+systemctl list-timers | grep proxy-monitor
+
+# Логи в реальном времени
+tail -f /var/www/proxy_monitor/monitor.log
+
+# Сменить пароль админа
+sudo htpasswd /opt/proxy_monitor/.htpasswd admin
+
+# Проверить, что .htpasswd валиден
+sudo cat /opt/proxy_monitor/.htpasswd
+# Ожидаем: admin:$apr1$... или admin:$6$...
