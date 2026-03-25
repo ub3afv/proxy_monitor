@@ -1,8 +1,8 @@
 
 🚀 Установка:
 # 1. Создать файлы
-nano install.sh    # вставить код → Ctrl+O → Enter → Ctrl+X
-nano uninstall.sh  # вставить код → Ctrl+O → Enter → Ctrl+X
+nano install.sh    # 
+nano uninstall.sh  # 
 
 # 2. Запустить
 chmod +x install.sh uninstall.sh
